@@ -5,9 +5,11 @@ import com.boardproject.board.entity.BoardEntity;
 import com.boardproject.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 // DTO -> Entity (Entity Class, Repository로 넘겨줄 때)
 // Entity -> DTO (DTO Class, Repository에서 넘겨받을 떄)
@@ -30,5 +32,20 @@ public class BoardService {
             boardDTOList.add(BoardDTO.toBoardDTO(boardEntity));
         }
         return boardDTOList;
+    }
+
+    @Transactional // jpa query 매서드 외의 별도의 추가된 매서드를 실행하는 경우 반드시 붙여야 함
+    public void updateHits(Long id) { //다른 매서드들은 기본적으로 jpa에서 제공하는 기본적인 매서드들이라 정의할 필요가 없는데, 이건 정의해야함
+        boardRepository.updateHits(id);
+    }
+
+    public BoardDTO findById(Long id) {
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
+        if(optionalBoardEntity.isPresent()){
+            BoardEntity boardEntity = optionalBoardEntity.get();
+            BoardDTO boardDTO = BoardDTO.toBoardDTO(boardEntity);
+            return boardDTO;
+        }
+        else return null;
     }
 }
