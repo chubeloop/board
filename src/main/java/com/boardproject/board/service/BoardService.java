@@ -48,4 +48,14 @@ public class BoardService {
         }
         else return null;
     }
+
+    public BoardDTO update(BoardDTO boardDTO) {
+        BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
+        boardRepository.save(boardEntity);
+        /*
+        jpa에 update 매서드가 정의되어있지 않음. 하지만 save 하나로 update, insert 들 다 할 수 있음.
+        처음에 id 값이 없는 상태로 Entity 객체가 넘어온다면 insert, 있다면 update가 됨
+         */
+        return findById(boardDTO.getId());
+    }
 }
