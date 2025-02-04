@@ -20,6 +20,7 @@ public class BaseEntitiy {
     @Column(updatable = false)
     private LocalDateTime creationTime;
 
+
     @UpdateTimestamp
     @Column(insertable = false)
     private LocalDateTime updateTime;
