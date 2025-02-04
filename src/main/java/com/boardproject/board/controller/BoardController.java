@@ -55,11 +55,18 @@ public class BoardController {
         model.addAttribute("boardUpdate", boeardDTO);
         return "update";
     }
-  @PostMapping("/update")
+
+    @PostMapping("/update")
     public String update(@ModelAttribute BoardDTO boardDTO, Model model) {
         BoardDTO board = boardService.update(boardDTO);
         model.addAttribute("board", board);
         return "detail";
-  }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        boardService.delete(id);
+        return "redirect:/board/";
+    }
 
 }
