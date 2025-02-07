@@ -34,7 +34,7 @@ public class BoardEntity extends BaseEntitiy {
     private int boardHits;
 
     @Column
-    private int boardAttached;
+    private int fileAttached;
 
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntityList = new ArrayList<>(); // 한 게시물에 여러개의 파일이 들어갈 수 있기 때문
@@ -46,7 +46,7 @@ public class BoardEntity extends BaseEntitiy {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
-        boardEntity.setBoardAttached(0);
+        boardEntity.setFileAttached(0);
         return boardEntity;
     }
 
@@ -68,7 +68,7 @@ public class BoardEntity extends BaseEntitiy {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
-        boardEntity.setBoardAttached(1);
+        boardEntity.setFileAttached(1);
         return boardEntity;
     }
 }

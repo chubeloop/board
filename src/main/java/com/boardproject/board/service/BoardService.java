@@ -60,6 +60,7 @@ public class BoardService {
         }
     }
 
+    @Transactional // 부모 Entity에서 자식 Entity를 호출할 떄 써줘야함. toBOardDTO에서 부모->자식 호출하기 떄문
     public List<BoardDTO> findAll() {
         List<BoardEntity> boardEntityList = boardRepository.findAll(); // DB에서 오는 data는 Entity 형식으로 넘어옴 -> DTO로 변환
         List<BoardDTO> boardDTOList = new ArrayList<>();
@@ -74,6 +75,7 @@ public class BoardService {
         boardRepository.updateHits(id);
     }
 
+    @Transactional // 부모 Entity에서 자식 Entity를 호출할 떄 써줘야함. toBOardDTO에서 부모->자식 호출하기 떄문
     public BoardDTO findById(Long id) {
         Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
         if(optionalBoardEntity.isPresent()){
