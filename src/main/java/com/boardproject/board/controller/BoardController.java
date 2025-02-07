@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -26,7 +27,7 @@ public class BoardController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute BoardDTO boardDTO) { // 필드값과 save.html의 content name이 동일하다면 알아서 setter 매서드로 값을 담아줌
+    public String save(@ModelAttribute BoardDTO boardDTO) throws IOException { // 필드값과 save.html의 content name이 동일하다면 알아서 setter 매서드로 값을 담아줌
         System.out.println("boardDTO = " + boardDTO);
         boardService.save(boardDTO);
         return "index";

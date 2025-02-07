@@ -2,6 +2,8 @@ package com.boardproject.board.service;
 
 import com.boardproject.board.dto.BoardDTO;
 import com.boardproject.board.entity.BoardEntity;
+import com.boardproject.board.entity.BoardFileEntity;
+import com.boardproject.board.repository.BoardFileRepository;
 import com.boardproject.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,7 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +28,36 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardFileRepository boardFileRepository;
 
-    public void save(BoardDTO boardDTO){
-        BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO);
-        boardRepository.save(boardEntity); // save 매서드는 Entity 객체를 매개변수로 해야함
+    public void save(BoardDTO boardDTO) throws IOException {
+        // 파일첨부 여부에 따라 분리
+        if(boardDTO.getBoardFile().isEmpty()){
+            BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO);
+            boardRepository.save(boardEntity); // save 매서드는 Entity 객체를 매개변수로 해야함
+        }
+        else{
+            /*
+                1. DTO에 담긴 파일을 꺼냄
+                2. 파일의 이름을 가져옴
+                3. 서버 저장용 이름을 만듦
+                4. 저장경로 설정
+                5. 해당 경로에 파일을 저장
+                6. board_table에 해당 데이터 save 처리
+                7. board_file_table에 해당 데이터 save 처리
+             */
+            MultipartFile boardFile = boardDTO.getBoardFile(); // 1
+            String originalFileName = boardFile.getOriginalFilename(); // 2
+            String storedFileName = System.currentTimeMillis() + "_" + originalFileName; // 3
+            String savePath = "C:/springboot_img/" + storedFileName; // 4
+            boardFile.transferTo(new File(savePath));  // 5
+            BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);
+            Long savedId = boardRepository.save(boardEntity).getId();
+            BoardEntity board  = boardRepository.findById(savedId).get();
+
+            BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFileName, storedFileName);
+            boardFileRepository.save(boardFileEntity);
+        }
     }
 
     public List<BoardDTO> findAll() {
