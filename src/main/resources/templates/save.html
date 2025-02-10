@@ -6,12 +6,12 @@
 </head>
 <body>
 <!-- action 속성: 목적지, method 속성: http request method(get, post)-->
-<form action="/board/save" method="post" enctype="multipart/form-data">
+<form action="/board/save" method="post" enctype="multipart/form-data"> <!-- enctype 속성이 지정이 돼야 실제 파일이 넘어감-->
     writer: <input type="text" name="boardWriter"> <br>
     pass: <input type="text" name="boardPass"> <br>
     title: <input type="text" name="boardTitle"> <br>
     contents: <textarea name="boardContents" cols="30" rows="10"></textarea> <br>
-    file: <input type="file" name="boardFile"> <br>
+    file: <input type="file" name="boardFile" multiple> <br>
     <input type="submit" value="글작성">
 </form>
 </body>
