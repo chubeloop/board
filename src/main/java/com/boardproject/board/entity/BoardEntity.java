@@ -39,6 +39,9 @@ public class BoardEntity extends BaseEntitiy {
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntityList = new ArrayList<>(); // 한 게시물에 여러개의 파일이 들어갈 수 있기 때문
 
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardFileEntity> commentEntityList = new ArrayList<>(); // 한 게시물에 여러개의 파일이 들어갈 수 있기 때문
+
     public static BoardEntity toSaveEntity(BoardDTO boardDTO) { // DTO 값 -> Entity 객체
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setBoardWriter(boardDTO.getBoardWriter());

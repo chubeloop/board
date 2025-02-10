@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>detail</title>
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 </head>
 <body>
 <table>
@@ -38,6 +40,18 @@
 <button onclick="listReq()">목록</button>
 <button onclick="updateReq()">수정</button>
 <button onclick="deleteReq()">삭제</button>
+
+<!-- 댓글 작성 부분 -->
+<div id="comment-writer">
+    <input type="text" id="commentWriter" placeholder="작성자">
+    <input type="text" id="commentContent" placeholder="내용">
+    <button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>
+</div>
+
+<!-- 댓글 출력 부분 -->
+<div id="comment-list">
+</div>
+
 </body>
 <script th:inline="javascript">
     const listReq = () => {
@@ -54,6 +68,31 @@
         console.log("삭제 요청");
         const id = /*[[${board.id}]]*/ 0;
         location.href = "/board/delete/" + id;
+    }
+
+    const commentWrite = () => {
+        const writer = document.getElementById("commentWriter").value;
+        const contents = document.getElementById("commentContent").value;
+        console.log("작성자 :" , writer);
+        console.log("내용 :", contents);
+        const id = /*[[${board.id}]]*/ 0;
+        $.ajax({
+            //  요청방식: post, 요청주소: /comment/save, 요청데이터: 작성자, 작성내용, 게시글 번호
+            type: "post",
+            url: "/comment/save",
+            data: {
+                "commentWriter": writer,
+                "commentContents": contents,
+                "boardId": id
+            },
+            success: function (res){
+                console.log("요청 성공", res);
+            },
+            error: function (err){
+                console.log("요청 실패", res);
+            }
+
+        })
     }
 </script>
 </html>
